@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TimeWise - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="8.5" stroke="#c8f135" stroke-width="1.8"/>
+          <path d="M11 6v5l3.5 2.2" stroke="#c8f135" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">Time<span>Wise</span></div>
+    </div>
+
+    <span class="sidebar-section">Estudos</span>
+    <button class="nav-item active" onclick="switchTab('minhas-aulas')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h12v12H4V4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Minhas Aulas
+    </button>
+    <button class="nav-item" onclick="switchTab('materias')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h14M3 10h14M3 15h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Matérias UNIPLAC
+    </button>
+
+    <span class="sidebar-section">Análise</span>
+    <button class="nav-item" onclick="switchTab('dashboard')">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 14l4-4 3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+      Dashboard
+    </button>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar">AS</div>
+      <div>
+        <div class="profile-name">Ana Silva</div>
+        <div class="profile-course">Pedagogia · 3º semestre</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ════ TAB: MINHAS AULAS ════ -->
+    <div class="tab-content active" id="tab-minhas-aulas">
+      <div class="page-header">
+        <div>
+          <div class="page-title">
+            <svg class="page-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M12 8h5M12 12h5"/></svg>
+            Minhas Aulas
+          </div>
+          <div class="page-sub">Organize seus materiais e deixe a IA preparar seu estudo</div>
+        </div>
+        <button class="btn btn-accent" onclick="toggleAddForm()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Nova Aula
+        </button>
+      </div>
+
+      <!-- CONFIG AGENDA -->
+      <div class="config-bar">
+        <div class="field-group">
+          <label class="field-label"><svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Tempo disponível</label>
+          <select class="field-input" id="studyTime">
+            <option value="15">15 minutos</option>
+            <option value="30" selected>30 minutos</option>
+            <option value="45">45 minutos</option>
+            <option value="60">1 hora</option>
+            <option value="90">1h 30min</option>
+            <option value="120">2 horas</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label"><svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l-2.5 1.5"/></svg> Melhor horário</label>
+          <select class="field-input" id="studyHour">
+            <option value="manha">Manhã (7h–12h)</option>
+            <option value="tarde" selected>Tarde (13h–18h)</option>
+            <option value="noite">Noite (19h–23h)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label"><svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 10h18"/><path d="M8 2v4M16 2v4"/></svg> Frequência</label>
+          <select class="field-input" id="studyFreq">
+            <option value="diario">Todos os dias</option>
+            <option value="uteis" selected>Dias úteis</option>
+            <option value="fins">Fins de semana</option>
+          </select>
+        </div>
+        <button class="btn btn-ghost" onclick="saveAgenda()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 4L6 11 3 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Salvar Agenda
+        </button>
+      </div>
+
+      <!-- SEMANA -->
+      <div class="week-strip" id="weekStrip"></div>
+
+      <!-- ADD FORM -->
+      <div class="add-aula-form" id="addForm" style="display:none">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px"><path d="M12 5v14M5 12h14"/></svg>Adicionar Nova Aula
+        </h3>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Tema da Aula</label>
+            <input type="text" class="field-input" id="newAulaTema" placeholder="Ex: Psicologia do Desenvolvimento Infantil"/>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Disciplina</label>
+            <input type="text" class="field-input" id="newAulaDisc" placeholder="Ex: Psicologia da Educação"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Materiais de Estudo (livros, resumos, slides)</label>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" multiple accept=".pdf,.doc,.docx,.txt,.ppt,.pptx" onchange="handleFiles(this)"/>
+            <div class="upload-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            </div>
+            <div style="font-size:14px;font-weight:600;color:var(--gray)">Arraste ou clique para adicionar arquivos</div>
+            <div class="upload-text">PDF, DOC, PPT, TXT · Múltiplos arquivos permitidos</div>
+          </div>
+          <div class="uploaded-files-list" id="uploadedFilesList"></div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Anotações adicionais (opcional)</label>
+          <textarea class="field-input" id="newAulaNotes" rows="2" placeholder="Cole aqui textos, links ou observações..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-accent" onclick="addAula()">Salvar e Gerar Estudo</button>
+          <button class="btn btn-ghost" onclick="toggleAddForm()">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div class="ai-loading" id="aiLoading">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <div class="loading-text" id="loadingText">A IA está analisando seus materiais e preparando um resumo personalizado…</div>
+      </div>
+
+      <!-- AI RESULT -->
+      <div class="ai-result" id="aiResult">
+        <div class="ai-result-header">
+          <span class="ai-badge">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 4h4L9 7.5l1.5 4L7 9l-3.5 2.5 1.5-4L2 5.5h4L7 1z" fill="currentColor"/></svg>
+            Resumo IA
+          </span>
+          <span class="ai-time-badge" id="aiTimeBadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 30 min de estudo</span>
+        </div>
+        <div class="ai-summary-title" id="aiSummaryTitle">Psicologia do Desenvolvimento Infantil</div>
+        <div class="ai-summary-body" id="aiSummaryBody"></div>
+        <div class="divider"></div>
+        <div class="quiz-section">
+          <div class="quiz-title">
+            Teste seu Conhecimento
+            <span id="quizCount">5 perguntas</span>
+          </div>
+          <div id="questionsContainer"></div>
+          <div id="quizResultBar" class="quiz-result-bar">
+            <div>
+              <div class="result-score" id="resultScore">0/5</div>
+              <div class="result-label">respostas corretas</div>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--black)" id="resultMsg">Bom trabalho!</div>
+              <div style="font-size:12px;color:var(--gray)" id="resultSub">Revise os temas marcados em vermelho.</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="resetQuiz()">Refazer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AULAS EXISTENTES -->
+      <div>
+        <span class="period-label">AULAS SALVAS</span>
+        <div class="aulas-grid" id="aulasGrid"></div>
+      </div>
+    </div>
+
+    <!-- ════ TAB: MATÉRIAS UNIPLAC ════ -->
+    <div class="tab-content" id="tab-materias">
+      <div class="page-header">
+        <div>
+          <div class="page-title">
+            <svg class="page-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
+            Matérias UNIPLAC
+          </div>
+          <div class="page-sub">Curso de Pedagogia · Grade curricular completa</div>
+        </div>
+      </div>
+
+      <div class="config-bar" style="grid-template-columns:1fr 1fr auto">
+        <div class="field-group">
+          <label class="field-label"><svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Tempo de estudo</label>
+          <select class="field-input" id="matTime">
+            <option value="15">15 minutos</option>
+            <option value="30" selected>30 minutos</option>
+            <option value="45">45 minutos</option>
+            <option value="60">1 hora</option>
+            <option value="90">1h 30min</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label"><svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Foco</label>
+          <select class="field-input" id="matFocus">
+            <option value="resumo">Resumo teórico</option>
+            <option value="pratico">Exemplos práticos</option>
+            <option value="aprofundado">Aprofundado</option>
+          </select>
+        </div>
+        <button class="btn btn-accent" id="btnEstudarMateria" onclick="estudarMateria()" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l7 5-7 5V3z" fill="currentColor"/></svg>
+          Estudar Agora
+        </button>
+      </div>
+
+      <div class="materias-layout scroll-area">
+        <div class="materias-list" id="materiasList"></div>
+
+        <div class="materia-detail" id="materiaDetail">
+          <div class="placeholder-state">
+            <div class="placeholder-icon">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            </div>
+            <div class="placeholder-title">Selecione uma matéria</div>
+            <div class="placeholder-sub">Escolha uma disciplina da lista ao lado para ver a ementa e gerar um resumo com IA.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI LOADING MATERIA -->
+      <div class="ai-loading" id="matAiLoading" style="display:none">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <div class="loading-text" id="matLoadingText">Buscando materiais e preparando resumo…</div>
+      </div>
+
+      <!-- AI RESULT MATERIA -->
+      <div class="ai-result" id="matAiResult">
+        <div class="ai-result-header">
+          <span class="ai-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg> Resumo IA · UNIPLAC</span>
+          <span class="ai-time-badge" id="matAiTimeBadge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 30 min</span>
+        </div>
+        <div class="ai-summary-title" id="matAiTitle"></div>
+        <div class="ai-summary-body" id="matAiBody"></div>
+        <div class="divider"></div>
+        <div class="quiz-section">
+          <div class="quiz-title">Questões de Fixação <span id="matQuizCount">4 perguntas</span></div>
+          <div id="matQuestionsContainer"></div>
+          <div id="matQuizResultBar" class="quiz-result-bar">
+            <div>
+              <div class="result-score" id="matResultScore">0/4</div>
+              <div class="result-label">respostas corretas</div>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--black)" id="matResultMsg">Bom trabalho!</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="resetMatQuiz()">Refazer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB: DASHBOARD ════ -->
+    <div class="tab-content" id="tab-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">
+            <svg class="page-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="15" rx="1"/><rect x="17" y="2" width="4" height="19" rx="1"/></svg>
+            Dashboard
+          </div>
+          <div class="page-sub">Acompanhe seu desempenho e evolução nos estudos</div>
+        </div>
+        <div style="font-size:12px;color:var(--gray);text-align:right">
+          Atualizado agora<br><span style="color:var(--accent);font-weight:600">Maio 2025</span>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="dash-grid" id="dashStats"></div>
+
+      <!-- ACTIVITY + NOTAS -->
+      <div class="dash-row">
+        <div class="dash-card">
+          <div class="dash-card-title">
+            Horas Estudadas (últimas 12 semanas)
+            <span style="font-size:12px;color:var(--accent);font-weight:600">↑ 14%</span>
+          </div>
+          <div class="bar-chart" id="horasChart"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Média de Notas por Disciplina</div>
+          <div class="notas-list" id="notasList"></div>
+        </div>
+      </div>
+
+      <!-- PROGRESS + HEATMAP -->
+      <div class="dash-row">
+        <div class="dash-card">
+          <div class="dash-card-title">Progressão de Conteúdos</div>
+          <div class="progress-list" id="progressList"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">
+            Mapa de Atividade
+            <span style="font-size:12px;color:var(--gray)">dias estudados</span>
+          </div>
+          <div class="heatmap" id="heatmap"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+            <span style="font-size:11px;color:var(--gray)">Menos</span>
+            <div style="width:12px;height:12px;border-radius:3px;background:var(--cream)"></div>
+            <div style="width:12px;height:12px;border-radius:3px;background:rgba(200,241,53,0.2)"></div>
+            <div style="width:12px;height:12px;border-radius:3px;background:rgba(200,241,53,0.5)"></div>
+            <div style="width:12px;height:12px;border-radius:3px;background:var(--accent)"></div>
+            <span style="font-size:11px;color:var(--gray)">Mais</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDATIONS -->
+      <div class="dash-card">
+        <div class="dash-card-title">💡 Recomendações da IA</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px" id="recList"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const MATERIAS_UNIPLAC = [
+  {id:1, nome:"Fundamentos da Educação", codigo:"PED101", periodo:"1º", ementa:["História da Educação","Filosofia da Educação","Políticas Educacionais","LDB e legislação"]},
+  {id:2, nome:"Psicologia do Desenvolvimento", codigo:"PED102", periodo:"1º", ementa:["Teorias do desenvolvimento","Piaget","Vygotsky","Erikson","Infância e adolescência"]},
+  {id:3, nome:"Didática Geral", codigo:"PED103", periodo:"2º", ementa:["Planejamento pedagógico","Métodos de ensino","Avaliação da aprendizagem","Currículo"]},
+  {id:4, nome:"Educação Infantil", codigo:"PED201", periodo:"2º", ementa:["BNCC Educação Infantil","Rotinas","Brincadeira e aprendizagem","Ambiente educativo"]},
+  {id:5, nome:"Alfabetização e Letramento", codigo:"PED202", periodo:"3º", ementa:["Métodos de alfabetização","Consciência fonológica","Letramento","Literatura infantil"]},
+  {id:6, nome:"Psicologia da Educação", codigo:"PED203", periodo:"3º", ementa:["Aprendizagem significativa","Motivação","Dificuldades de aprendizagem","Teorias pedagógicas"]},
+  {id:7, nome:"Currículo e Avaliação", codigo:"PED301", periodo:"4º", ementa:["Teorias curriculares","Currículo oculto","Avaliação formativa e somativa","PCN e BNCC"]},
+  {id:8, nome:"Educação Especial e Inclusiva", codigo:"PED302", periodo:"4º", ementa:["Políticas de inclusão","AEE","Altas habilidades","Deficiências","Adaptações pedagógicas"]},
+  {id:9, nome:"Gestão Escolar", codigo:"PED401", periodo:"5º", ementa:["PPP","Gestão democrática","Conselho escolar","Financiamento da educação"]},
+  {id:10, nome:"Metodologias Ativas", codigo:"PED402", periodo:"5º", ementa:["Sala de aula invertida","PBL","Design thinking educacional","Tecnologias na educação"]},
+  {id:11, nome:"Estágio Supervisionado I", codigo:"PED403", periodo:"5º", ementa:["Observação escolar","Regência","Relatório de estágio","Ética profissional"]},
+  {id:12, nome:"Pesquisa em Educação", codigo:"PED501", periodo:"6º", ementa:["Metodologia científica","TCC","Pesquisa qualitativa e quantitativa","Estado da arte"]},
+];
+
+let aulas = [
+  {id:1, tema:"Piaget e o Desenvolvimento Cognitivo", disciplina:"Psicologia da Educação", files:["Slides_Piaget.pdf","Resumo_cap3.txt"], notes:"", date:new Date()},
+  {id:2, tema:"BNCC e Educação Infantil", disciplina:"Educação Infantil", files:["BNCC_EI.pdf"], notes:"", date:new Date()},
+];
+
+let uploadedFiles = [];
+let selectedMateria = null;
+let currentQuizAnswers = [];
+let matCurrentQuizAnswers = [];
+let quizData = [];
+let matQuizData = [];
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// WEEK STRIP
+// ══════════════════════════════════════════
+function buildWeek() {
+  const strip = document.getElementById('weekStrip');
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const today = new Date();
+  strip.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - today.getDay() + i);
+    const isToday = d.toDateString() === today.toDateString();
+    const hasStudy = [1,2,3,4].includes(i);
+    const times = ['','14h','14h','19h','19h','',''];
+    const div = document.createElement('div');
+    div.className = 'week-day' + (isToday?' today':'') + (hasStudy?' has-study':'');
+    div.innerHTML = `<div class="week-day-name">${days[i]}</div>
+      <div class="week-day-num">${d.getDate()}</div>
+      ${times[i] ? `<div class="week-day-time">${times[i]}</div>` : ''}`;
+    strip.appendChild(div);
+  }
+}
+
+// ══════════════════════════════════════════
+// ADD AULA
+// ══════════════════════════════════════════
+function toggleAddForm() {
+  const f = document.getElementById('addForm');
+  f.style.display = f.style.display === 'none' ? 'flex' : 'none';
+}
+
+function handleFiles(input) {
+  const list = document.getElementById('uploadedFilesList');
+  Array.from(input.files).forEach(f => {
+    uploadedFiles.push(f.name);
+    const tag = document.createElement('div');
+    tag.className = 'uploaded-file';
+    tag.innerHTML = `📄 ${f.name} <span class="remove-file" onclick="removeFile(this,'${f.name}')">×</span>`;
+    list.appendChild(tag);
+  });
+}
+
+function removeFile(el, name) {
+  uploadedFiles = uploadedFiles.filter(f => f !== name);
+  el.closest('.uploaded-file').remove();
+}
+
+function addAula() {
+  const tema = document.getElementById('newAulaTema').value.trim();
+  const disc = document.getElementById('newAulaDisc').value.trim();
+  if (!tema) { toast('Informe o tema da aula!', 'error'); return; }
+
+  const aula = { id: Date.now(), tema, disciplina: disc || 'Sem disciplina', files: [...uploadedFiles], notes: document.getElementById('newAulaNotes').value, date: new Date() };
+  aulas.unshift(aula);
+  renderAulas();
+  toggleAddForm();
+  uploadedFiles = [];
+  document.getElementById('uploadedFilesList').innerHTML = '';
+  document.getElementById('newAulaTema').value = '';
+  document.getElementById('newAulaDisc').value = '';
+  document.getElementById('newAulaNotes').value = '';
+  toast('Aula adicionada! Gerando resumo com IA…', 'success');
+  generateAIContent(aula);
+}
+
+function renderAulas() {
+  const grid = document.getElementById('aulasGrid');
+  grid.innerHTML = aulas.map(a => `
+    <div class="aula-card">
+      <div class="aula-card-header">
+        <div>
+          <div class="aula-title">${a.tema}</div>
+          <div class="aula-meta">${a.disciplina} · ${a.date.toLocaleDateString('pt-BR')}</div>
+        </div>
+        <span class="aula-badge">${a.files.length} arquivo${a.files.length !== 1?'s':''}</span>
+      </div>
+      <div class="aula-files">
+        ${a.files.map(f => `<span class="file-tag">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 1h6l2 2v8H2V1z" stroke="currentColor" stroke-width="1.2"/></svg>
+          ${f}
+        </span>`).join('')}
+        ${a.files.length === 0 ? '<span style="font-size:12px;color:var(--gray)">Sem arquivos</span>' : ''}
+      </div>
+      <div class="aula-actions">
+        <button class="btn btn-accent btn-sm" onclick="generateAIContent(aulas.find(x=>x.id===${a.id}))">
+          ✨ Gerar Resumo IA
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAula(${a.id})">Excluir</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteAula(id) {
+  aulas = aulas.filter(a => a.id !== id);
+  renderAulas();
+  toast('Aula removida.', 'success');
+}
+
+// ══════════════════════════════════════════
+// AI CONTENT (calls real Claude API)
+// ══════════════════════════════════════════
+async function generateAIContent(aula) {
+  const time = document.getElementById('studyTime').value;
+  const loading = document.getElementById('aiLoading');
+  const result = document.getElementById('aiResult');
+  result.classList.remove('visible');
+  loading.classList.add('visible');
+  document.getElementById('loadingText').textContent = `Analisando "${aula.tema}" e preparando ${time} min de estudo…`;
+
+  const prompt = `Você é um assistente pedagógico especializado em ajudar estudantes de Pedagogia.
+
+O aluno tem ${time} minutos disponíveis para estudar o tema: "${aula.tema}" (disciplina: ${aula.disciplina}).
+${aula.files.length > 0 ? `Materiais disponíveis: ${aula.files.join(', ')}` : ''}
+${aula.notes ? `Anotações do aluno: ${aula.notes}` : ''}
+
+Produza:
+1. Um resumo de estudo adaptado para ${time} minutos (mais curto = mais focado nos conceitos-chave). Use **negrito** para conceitos-chave. Inclua subtópicos se couber no tempo.
+2. Exatamente 4 perguntas de múltipla escolha (A, B, C, D) sobre o tema, com gabarito indicado entre colchetes [CORRETA: X].
+
+Formate assim (separado por ===QUIZ===):
+[RESUMO]
+Aqui vai o resumo...
+===QUIZ===
+1. Pergunta aqui?
+A) Opção
+B) Opção
+C) Opção
+D) Opção
+[CORRETA: B]
+(repita para as 4 perguntas)`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(b => b.text || '').join('');
+    parseAndRenderAI(text, aula.tema, time, false);
+  } catch(e) {
+    // Fallback com conteúdo demo
+    const demo = buildDemoContent(aula.tema, time);
+    parseAndRenderAI(demo, aula.tema, time, false);
+  }
+
+  loading.classList.remove('visible');
+  document.getElementById('aiResult').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function parseAndRenderAI(text, titulo, time, isMat) {
+  const prefix = isMat ? 'mat' : '';
+  const parts = text.split('===QUIZ===');
+  let resumo = parts[0] || text;
+  resumo = resumo.replace(/\[RESUMO\]/gi, '').trim();
+  // Convert **bold** to <strong>
+  resumo = resumo.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  resumo = resumo.replace(/\n/g, '<br>');
+
+  document.getElementById(prefix + 'aiSummaryTitle' || 'aiSummaryTitle').textContent = titulo;
+  if (isMat) document.getElementById('matAiTitle').textContent = titulo;
+  else document.getElementById('aiSummaryTitle').textContent = titulo;
+
+  const bodyEl = document.getElementById(isMat ? 'matAiBody' : 'aiSummaryBody');
+  bodyEl.innerHTML = resumo;
+
+  const timeBadge = document.getElementById(isMat ? 'matAiTimeBadge' : 'aiTimeBadge');
+  timeBadge.textContent = `⏱ ${time} min de estudo`;
+
+  // Parse quiz
+  const quizText = parts[1] || '';
+  const questions = parseQuiz(quizText);
+  const qData = isMat ? matQuizData : quizData;
+  if (isMat) { matQuizData = questions; } else { quizData = questions; }
+
+  const container = document.getElementById(isMat ? 'matQuestionsContainer' : 'questionsContainer');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.innerHTML = `<div class="question-text">${qi+1}. ${q.text}</div>
+      <div class="options">
+        ${q.options.map((opt, oi) => `
+          <div class="option" data-qi="${qi}" data-oi="${oi}" onclick="selectOption(this,${qi},${oi},'${isMat?'mat':''}')">
+            <span class="option-letter">${['A','B','C','D'][oi]}</span>
+            ${opt}
+          </div>
+        `).join('')}
+      </div>`;
+    container.appendChild(block);
+  });
+
+  const countEl = document.getElementById(isMat ? 'matQuizCount' : 'quizCount');
+  countEl.textContent = `${questions.length} perguntas`;
+
+  const resultBar = document.getElementById(isMat ? 'matQuizResultBar' : 'quizResultBar');
+  resultBar.classList.remove('visible');
+
+  const resultEl = document.getElementById(isMat ? 'matAiResult' : 'aiResult');
+  resultEl.classList.add('visible');
+}
+
+function parseQuiz(text) {
+  if (!text.trim()) return buildDemoQuiz();
+  const questions = [];
+  const blocks = text.trim().split(/\n(?=\d+\.)/);
+  blocks.forEach(block => {
+    const lines = block.trim().split('\n').filter(l => l.trim());
+    if (lines.length < 2) return;
+    const qText = lines[0].replace(/^\d+\.\s*/, '').trim();
+    const options = [];
+    let correct = 0;
+    lines.slice(1).forEach(l => {
+      const optMatch = l.match(/^[A-D]\)\s*(.+)/);
+      const corrMatch = l.match(/\[CORRETA:\s*([A-D])\]/i);
+      if (optMatch) options.push(optMatch[1].trim());
+      if (corrMatch) correct = ['A','B','C','D'].indexOf(corrMatch[1].toUpperCase());
+    });
+    if (qText && options.length >= 2) questions.push({ text: qText, options, correct });
+  });
+  return questions.length > 0 ? questions : buildDemoQuiz();
+}
+
+function buildDemoQuiz() {
+  return [
+    { text: "Qual é o principal objetivo da pedagogia histórico-crítica?", options: ["Transmitir conteúdos de forma mecânica","Transformar a sociedade por meio da educação","Adaptar o aluno ao sistema vigente","Focar apenas no desenvolvimento afetivo"], correct: 1 },
+    { text: "Segundo Vygotsky, a Zona de Desenvolvimento Proximal (ZDP) refere-se:", options: ["Ao nível máximo que a criança pode atingir sozinha","À diferença entre o que a criança faz sozinha e com ajuda","Ao conjunto de habilidades inatas da criança","Ao desenvolvimento físico em primeiro ano de vida"], correct: 1 },
+    { text: "A avaliação formativa tem como principal característica:", options: ["Ocorrer apenas ao final do bimestre","Servir para classificar os alunos","Acompanhar e orientar o processo de aprendizagem","Substituir as provas tradicionais"], correct: 2 },
+    { text: "O PPP (Projeto Político Pedagógico) é um documento que:", options: ["É elaborado apenas pela direção da escola","Define a identidade e o planejamento da escola","Substitui o plano de aula do professor","É obrigatório apenas em escolas privadas"], correct: 1 },
+  ];
+}
+
+function buildDemoContent(tema, time) {
+  const mins = parseInt(time);
+  let depth = mins <= 20 ? "foco nos conceitos mais essenciais" : mins <= 45 ? "abordagem completa dos principais tópicos" : "aprofundamento com exemplos práticos";
+  return `[RESUMO]
+**${tema}** — Resumo para ${time} minutos (${depth})
+
+**Conceitos Fundamentais**
+Este tema é central no campo da Pedagogia e se articula diretamente com as práticas docentes. Os fundamentos teóricos partem de autores como **Piaget**, **Vygotsky** e **Freire**, cada um contribuindo com perspectivas únicas sobre aprendizagem e desenvolvimento.
+
+**Principais pontos a dominar:**
+- A relação entre teoria e prática pedagógica
+- Os processos de ensino-aprendizagem situados historicamente
+- A mediação como elemento central da educação intencional
+- A importância do contexto sociocultural no desenvolvimento do aluno
+
+${mins >= 45 ? `**Aprofundamento:** As implicações para a prática docente incluem o planejamento baseado em diagnóstico, a escolha de metodologias ativas e a avaliação contínua do processo.` : ''}
+
+===QUIZ===
+1. Qual teórico defende que o conhecimento é construído pela interação do sujeito com o objeto?
+A) Vygotsky
+B) Piaget
+C) Freire
+D) Ausubel
+[CORRETA: B]
+
+2. A aprendizagem significativa, segundo Ausubel, ocorre quando:
+A) O aluno memoriza o conteúdo repetidamente
+B) O novo conteúdo se conecta a conhecimentos prévios do aluno
+C) O professor explica mais de uma vez o mesmo tema
+D) O aluno realiza exercícios de fixação
+[CORRETA: B]
+
+3. A pedagogia de Paulo Freire critica principalmente:
+A) O uso de tecnologias na educação
+B) A avaliação somativa
+C) A educação bancária, que trata o aluno como receptor passivo
+D) O ensino de língua materna nas escolas
+[CORRETA: C]
+
+4. O planejamento pedagógico é importante porque:
+A) Substitui a criatividade do professor
+B) Engessa o processo de ensino
+C) Garante intencionalidade e organização às práticas docentes
+D) É exigido apenas por questões burocráticas
+[CORRETA: C]`;
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+let answers = {};
+let matAnswers = {};
+
+function selectOption(el, qi, oi, prefix) {
+  const isMat = prefix === 'mat';
+  const answerMap = isMat ? matAnswers : answers;
+  const qData = isMat ? matQuizData : quizData;
+
+  if (answerMap[qi] !== undefined) return; // already answered
+  answerMap[qi] = oi;
+
+  // Mark options
+  const parent = el.closest('.options');
+  parent.querySelectorAll('.option').forEach((opt, idx) => {
+    if (idx === qData[qi].correct) opt.classList.add('correct');
+    else if (idx === oi && idx !== qData[qi].correct) opt.classList.add('wrong');
+    opt.style.pointerEvents = 'none';
+  });
+
+  // Check if all answered
+  if (Object.keys(answerMap).length === qData.length) {
+    showQuizResult(isMat, answerMap, qData);
+  }
+}
+
+function showQuizResult(isMat, answerMap, qData) {
+  const correct = Object.keys(answerMap).filter(qi => answerMap[qi] === qData[qi].correct).length;
+  const total = qData.length;
+  const pct = Math.round((correct / total) * 100);
+  const bar = document.getElementById(isMat ? 'matQuizResultBar' : 'quizResultBar');
+  document.getElementById(isMat ? 'matResultScore' : 'resultScore').textContent = `${correct}/${total}`;
+  const msgs = pct >= 80 ? ['🎉 Excelente!','Você domina o conteúdo!'] : pct >= 50 ? ['👍 Bom trabalho!','Revise os temas marcados em vermelho.'] : ['📖 Precisa estudar mais.','Refaça o resumo e tente novamente.'];
+  document.getElementById(isMat ? 'matResultMsg' : 'resultMsg').textContent = msgs[0];
+  if (!isMat) document.getElementById('resultSub').textContent = msgs[1];
+  bar.classList.add('visible');
+
+  // Save to dashboard
+  updateDashboardStats(correct, total, isMat ? selectedMateria?.nome : null);
+  toast(`Quiz concluído: ${correct}/${total} (${pct}%)`, pct >= 60 ? 'success' : 'error');
+}
+
+function resetQuiz() { answers = {}; generateAIContent(aulas[0]); }
+function resetMatQuiz() { matAnswers = {}; estudarMateria(); }
+
+// ══════════════════════════════════════════
+// MATÉRIAS
+// ══════════════════════════════════════════
+function buildMateriasList() {
+  const list = document.getElementById('materiasList');
+  const periodos = [...new Set(MATERIAS_UNIPLAC.map(m => m.periodo))];
+  list.innerHTML = periodos.map(p => `
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);padding:8px 12px 4px">${p} SEMESTRE</div>
+    ${MATERIAS_UNIPLAC.filter(m => m.periodo === p).map(m => `
+      <div class="materia-item" onclick="selectMateria(${m.id})" id="mat-${m.id}">
+        <div class="materia-name">${m.nome}</div>
+        <div class="materia-code">${m.codigo}</div>
+      </div>
+    `).join('')}
+  `).join('');
+}
+
+function selectMateria(id) {
+  selectedMateria = MATERIAS_UNIPLAC.find(m => m.id === id);
+  document.querySelectorAll('.materia-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('mat-' + id).classList.add('active');
+  document.getElementById('btnEstudarMateria').disabled = false;
+
+  document.getElementById('materiaDetail').innerHTML = `
+    <div class="materia-detail-header">
+      <div class="materia-detail-title">${selectedMateria.nome}</div>
+      <div class="materia-detail-meta">${selectedMateria.codigo} · ${selectedMateria.periodo}º Semestre · UNIPLAC</div>
+    </div>
+    <div class="ementa-section">
+      <div class="ementa-title">Ementa / Tópicos</div>
+      <div class="ementa-topics">
+        ${selectedMateria.ementa.map(t => `<span class="topic-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+    <div style="background:var(--cream);border-radius:var(--radius-sm);padding:16px;font-size:13px;color:var(--gray);line-height:1.6">
+      💡 Configure o tempo de estudo acima e clique em <strong style="color:var(--black)">Estudar Agora</strong> para a IA gerar um resumo personalizado com base nesta disciplina.
+    </div>
+  `;
+
+  document.getElementById('matAiResult').classList.remove('visible');
+}
+
+async function estudarMateria() {
+  if (!selectedMateria) return;
+  const time = document.getElementById('matTime').value;
+  const focus = document.getElementById('matFocus').value;
+  const focusMap = { resumo:'resumo teórico claro e direto', pratico:'exemplos práticos e situações do cotidiano escolar', aprofundado:'análise aprofundada com referências teóricas' };
+
+  const loading = document.getElementById('matAiLoading');
+  const result = document.getElementById('matAiResult');
+  result.classList.remove('visible');
+  loading.style.display = 'flex';
+  document.getElementById('matLoadingText').textContent = `Preparando ${time} min sobre ${selectedMateria.nome}…`;
+  matAnswers = {};
+
+  const prompt = `Você é um professor universitário especialista em Pedagogia, preparando material para alunos da UNIPLAC.
+
+Disciplina: ${selectedMateria.nome} (${selectedMateria.codigo})
+Semestre: ${selectedMateria.periodo}º
+Tópicos da ementa: ${selectedMateria.ementa.join(', ')}
+Tempo de estudo: ${time} minutos
+Abordagem: ${focusMap[focus]}
+
+Produza:
+1. Resumo de estudo adaptado para ${time} minutos com ${focusMap[focus]}. Use **negrito** para conceitos-chave. Organize em subtópicos se o tempo permitir.
+2. Exatamente 4 perguntas de múltipla escolha (A, B, C, D) com gabarito.
+
+Formato (separado por ===QUIZ===):
+[RESUMO]
+Resumo aqui...
+===QUIZ===
+1. Pergunta?
+A) ...
+B) ...
+C) ...
+D) ...
+[CORRETA: X]
+(4 perguntas)`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(b => b.text || '').join('');
+    parseAndRenderAI(text, selectedMateria.nome, time, true);
+  } catch(e) {
+    const demo = buildDemoContent(selectedMateria.nome, time);
+    parseAndRenderAI(demo, selectedMateria.nome, time, true);
+  }
+
+  loading.style.display = 'none';
+  document.getElementById('matAiResult').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+let dashData = {
+  totalHours: 42,
+  avgNota: 7.8,
+  quizzesDone: 18,
+  streak: 5,
+};
+
+const notas = [
+  {nome:"Psicologia da Educação", nota:8.5},
+  {nome:"Didática Geral", nota:7.0},
+  {nome:"Educação Infantil", nota:9.0},
+  {nome:"Alfabetização e Letramento", nota:6.5},
+  {nome:"Fundamentos da Educação", nota:8.0},
+];
+
+const progressos = [
+  {nome:"Psicologia do Desenvolvimento", pct:85, fill:"fill-good"},
+  {nome:"Educação Infantil", pct:92, fill:"fill-good"},
+  {nome:"Didática Geral", pct:68, fill:"fill-mid"},
+  {nome:"Alfabetização e Letramento", pct:54, fill:"fill-mid"},
+  {nome:"Gestão Escolar", pct:32, fill:"fill-low"},
+  {nome:"Pesquisa em Educação", pct:21, fill:"fill-low"},
+];
+
+const ICON_WARNING = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>`;
+const ICON_TRENDING = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`;
+const ICON_BULB = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 016 6c0 2.2-1.2 4.2-3 5.4V17H9v-2.6A6.002 6.002 0 016 9a6 6 0 016-6z"/></svg>`;
+
+const recs = [
+  {icon:ICON_WARNING, title:"Revisar com urgência", text:"Pesquisa em Educação está em 21% de progressão. Dedique pelo menos 30min hoje.", color:"var(--danger)"},
+  {icon:ICON_TRENDING, title:"Você está indo bem!", text:"Educação Infantil está com 92% de progressão. Continue assim!",  color:"var(--success)"},
+  {icon:ICON_BULB, title:"Dica de estudo", text:"Use técnica Pomodoro: 25 min de foco + 5 min de pausa para maximizar retenção.", color:"var(--accent-dark)"},
+];
+
+function buildDashboard() {
+  // Stats
+  document.getElementById('dashStats').innerHTML = [
+    {label:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horas Estudadas`, value:dashData.totalHours+"h", change:"↑ +3h esta semana", type:"up", sub:"Total acumulado"},
+    {label:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="15" rx="1"/><rect x="17" y="2" width="4" height="19" rx="1"/></svg>Média Geral`, value:dashData.avgNota.toFixed(1), change:"↑ +0.3 vs mês ant.", type:"up", sub:"Baseada em quizzes"},
+    {label:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>Quizzes Feitos`, value:dashData.quizzesDone, change:"5 esta semana", type:"up", sub:"Total de exercícios"},
+    {label:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M8.5 14.5A4.5 4.5 0 0013 19c2.5 0 4.5-2 4.5-4.5 0-3.5-2.5-5.5-5.5-8.5-1 2-2 3-4 4.5C7 11.5 7 13.5 8.5 14.5z"/></svg>Dias Seguidos`, value:dashData.streak+"d", change:"Recorde: 12d", type:"up", sub:"Streak atual"},
+  ].map(s => `
+    <div class="stat-card">
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-value">${s.value}</div>
+      <div class="stat-change ${s.type}">${s.change}</div>
+      <div class="stat-sub">${s.sub}</div>
+    </div>
+  `).join('');
+
+  // Bar chart
+  const hours = [12,18,8,22,15,28,10,31,20,25,18,42];
+  const labels = ['Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','Jan'];
+  const max = Math.max(...hours);
+  document.getElementById('horasChart').innerHTML = hours.map((h, i) => `
+    <div class="bar-wrap">
+      <span class="bar-val">${h}h</span>
+      <div class="bar" style="height:${Math.round((h/max)*100)}%"></div>
+      <span class="bar-label">${labels[i]}</span>
+    </div>
+  `).join('');
+
+  // Notas
+  document.getElementById('notasList').innerHTML = notas.map(n => {
+    const cls = n.nota >= 8 ? 'green' : n.nota >= 6 ? 'yellow' : 'red';
+    return `<div class="nota-row">
+      <div class="nota-materia">${n.nome}</div>
+      <div class="nota-badge ${cls}">${n.nota.toFixed(1)}</div>
+    </div>`;
+  }).join('');
+
+  // Progress
+  document.getElementById('progressList').innerHTML = progressos.map(p => `
+    <div class="progress-item">
+      <div class="progress-header">
+        <span class="progress-name">${p.nome}</span>
+        <span class="progress-pct">${p.pct}%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill ${p.fill}" style="width:0%" data-pct="${p.pct}"></div>
+      </div>
+    </div>
+  `).join('');
+
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 200);
+
+  // Heatmap
+  const hmap = document.getElementById('heatmap');
+  hmap.innerHTML = '';
+  const vals = [0,1,0,2,3,1,0,0,2,1,3,4,0,1,2,3,0,1,2,0,1,3,2,1,0,0,2,3,1,4,0,1,2,1,0,2,3,1,0,1,2,3,0,2,1,0,3,4,0,1,2,0,1,3,0,1,2,3,0,1,2,1,3,4,0,1,2,0,1,2,3,1,0,1,2,3,0,1,2,0,1,3,2,1];
+  vals.forEach(v => {
+    const cell = document.createElement('div');
+    cell.className = 'heat-cell';
+    if (v > 0) cell.setAttribute('data-v', v);
+    hmap.appendChild(cell);
+  });
+
+  // Recs
+  document.getElementById('recList').innerHTML = recs.map(r => `
+    <div style="background:var(--cream);border-radius:var(--radius-sm);padding:18px;border-left:3px solid ${r.color}">
+      <div style="font-size:24px;margin-bottom:8px">${r.icon}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:6px">${r.title}</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--gray)">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+function updateDashboardStats(correct, total, materia) {
+  dashData.quizzesDone++;
+  const pct = correct / total;
+  dashData.avgNota = Math.min(10, parseFloat((dashData.avgNota * 0.9 + pct * 10 * 0.1).toFixed(1)));
+}
+
+function saveAgenda() { toast('Agenda salva! Notificações configuradas.', 'success'); }
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function toast(msg, type='success') {
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  const ic = type === 'success'
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>`;
+  el.innerHTML = ic + ' ' + msg;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3500);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildWeek();
+renderAulas();
+buildMateriasList();
+buildDashboard();
+</script>
+</body>
+</html>
